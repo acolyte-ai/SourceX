@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SourceX · AI-Powered News Verification</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --page-bg: #0a0e17;
+            --page-gradient: linear-gradient(135deg, #0a0e17 0%, #1a1f2e 50%, #0f1419 100%);
+            --surface: #161b26;
+            --surface-elevated: #1e2433;
+            --surface-muted: #131820;
+            --border: rgba(99, 102, 241, 0.15);
+            --border-bright: rgba(99, 102, 241, 0.3);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent: #6366f1;
+            --accent-strong: #4f46e5;
+            --accent-glow: rgba(99, 102, 241, 0.25);
+            --accent-soft: rgba(99, 102, 241, 0.1);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --true: #10b981;
+            --false: #ef4444;
+            --disputed: #f59e0b;
+            --unverified: #6366f1;
+            --shadow-sm: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.15);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--page-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 48px 24px 56px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            bottom: -30%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .top-bar {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .brand-mark {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+            display: grid;
+            place-items: center;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.02em;
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            position: relative;
+        }
+
+        .brand-mark::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.5), transparent);
+            z-index: -1;
+            filter: blur(8px);
+            opacity: 0.6;
+        }
+
+        .brand h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, #e2e8f0 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand p {
+            color: var(--text-secondary);
+            margin-top: 6px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .meta-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface);
+            color: var(--accent);
+            border-radius: 999px;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .meta-chip::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent-glow);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        .layout {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: clamp(320px, 35%, 420px) minmax(0, 1fr);
+            gap: 32px;
+            align-items: flex-start;
+            position: relative;
+            z-index: 1;
+        }
+
+        .panel {
+            background: var(--surface);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .panel--input {
+            position: sticky;
+            top: 32px;
+        }
+
+        .panel__header {
+            padding: 32px 32px 24px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface-elevated);
+        }
+
+        .panel__header h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .panel__header p {
+            margin-top: 10px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .form {
+            padding: 24px 32px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        textarea,
+        select,
+        input {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface-muted);
+            padding: 14px 16px;
+            font: inherit;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus,
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft), 0 8px 24px rgba(99, 102, 241, 0.15);
+            background: var(--surface-elevated);
+        }
+
+        textarea::placeholder,
+        input::placeholder {
+            color: var(--text-muted);
+        }
+
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            flex: 1;
+            border: none;
+            border-radius: 12px;
+            font: inherit;
+            font-weight: 600;
+            padding: 14px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        button:hover::before {
+            opacity: 1;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.4), 0 0 40px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--surface-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--surface-muted);
+            border-color: var(--border-bright);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .panel--insights {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .status-banner {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 20px 28px;
+            background: var(--surface-elevated);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-banner.is-active {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.12);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2);
+        }
+
+        .status-banner.is-error {
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.12);
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.2);
+        }
+
+        .status-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            position: relative;
+            background: var(--accent);
+            box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.6);
+            animation: pulse 2.4s infinite;
+        }
+
+        .status-banner.is-error .status-indicator {
+            background: var(--error);
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+        }
+
+        .status-copy {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .status-label {
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.14em;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .status-text {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .status-spinner {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 3px solid rgba(37, 99, 235, 0.2);
+            border-top-color: var(--accent);
+            animation: spin 1s linear infinite;
+        }
+
+        .insights-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .insight-card {
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 28px 32px;
+            background: var(--surface-elevated);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .insight-card:hover {
+            border-color: var(--border-bright);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .insight-card header {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .eyebrow {
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            color: var(--text-muted);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .card-subtitle {
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 999px;
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: rgba(71, 85, 105, 0.15);
+            color: var(--text-primary);
+            border: 1px solid rgba(71, 85, 105, 0.2);
+        }
+
+        .badge--subtle {
+            background: rgba(71, 85, 105, 0.1);
+            color: var(--text-secondary);
+            border: 1px solid rgba(71, 85, 105, 0.15);
+        }
+
+        .badge.verdict-true {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--true);
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.15);
+        }
+
+        .badge.verdict-false {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--false);
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.15);
+        }
+
+        .badge.verdict-disputed {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--disputed);
+            border-color: rgba(245, 158, 11, 0.3);
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.15);
+        }
+
+        .badge.verdict-unverified {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--unverified);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+        }
+
+        .analysis-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+        }
+
+        .metric {
+            padding: 16px 20px;
+            border-radius: 14px;
+            background: var(--surface-muted);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .metric:hover {
+            border-color: var(--border-bright);
+            background: var(--surface);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .analysis-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            color: var(--text-secondary);
+            line-height: 1.55;
+        }
+
+        .analysis-content p {
+            background: var(--surface-muted);
+            border-radius: 12px;
+            padding: 16px 18px;
+            border: 1px solid var(--border);
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .timeline-entry {
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: var(--surface-muted);
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-entry:hover {
+            border-color: var(--border-bright);
+            background: var(--surface-elevated);
+        }
+
+        .timeline-entry::before {
+            content: "";
+            position: absolute;
+            top: 18px;
+            left: -6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 12px currentColor;
+            border: 2px solid var(--surface);
+        }
+
+        .timeline-entry.type-start::before {
+            background: var(--accent);
+            color: var(--accent-glow);
+        }
+
+        .timeline-entry.type-phase::before {
+            background: var(--warning);
+            color: rgba(245, 158, 11, 0.3);
+        }
+
+        .timeline-entry.type-agent_start::before {
+            background: var(--accent);
+            color: var(--accent-glow);
+        }
+
+        .timeline-entry.type-agent_update::before {
+            background: var(--accent-strong);
+            color: rgba(79, 70, 229, 0.3);
+        }
+
+        .timeline-entry.type-agent_complete::before {
+            background: var(--success);
+            color: rgba(16, 185, 129, 0.3);
+        }
+
+        .timeline-entry.type-final_result::before {
+            background: var(--true);
+            color: rgba(16, 185, 129, 0.3);
+        }
+
+        .timeline-entry.type-complete::before {
+            background: var(--true);
+            color: rgba(16, 185, 129, 0.3);
+        }
+
+        .timeline-entry.type-error::before {
+            background: var(--error);
+            color: rgba(239, 68, 68, 0.3);
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .entry-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .entry-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .entry-body {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .metrics-grid {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+        }
+
+        .metric-card {
+            padding: 18px 20px;
+            border-radius: 14px;
+            background: var(--surface-muted);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .metric-card .value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .metric-card .label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .helper-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            background: var(--surface-muted);
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 12px rgba(37, 99, 235, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 1080px) {
+            body {
+                padding: 32px 20px 48px;
+            }
+
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .panel--input {
+                position: static;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 24px 16px 40px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .panel__header,
+            .form {
+                padding: 20px;
+            }
+
+            button {
+                padding: 12px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="top-bar">
+        <div class="brand">
+            <div class="brand-mark">SX</div>
+            <div>
+                <h1>SourceX</h1>
+                <p>AI-powered news verification and fact-checking platform for trusted journalism.</p>
+            </div>
+        </div>
+        <span class="meta-chip">Live Platform</span>
+    </header>
+
+    <main class="layout">
+        <section class="panel panel--input">
+            <div class="panel__header">
+                <h2>Verify News Article</h2>
+                <p>Enter the news claim and source URL. Select a category to enhance verification accuracy.</p>
+            </div>
+
+            <div class="form">
+                <div class="input-group">
+                    <label for="claimText">News Claim</label>
+                    <textarea id="claimText"
+                        placeholder="Enter the news claim you want to verify, e.g., &quot;Scientists discover breakthrough treatment with 95% success rate&quot;"></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label for="sourceUrl">Source URL</label>
+                    <input type="url" id="sourceUrl" placeholder="https://newssite.com/article-url" />
+                </div>
+
+                <div class="input-group">
+                    <label for="crisisType">News Category</label>
+                    <select id="crisisType">
+                        <option value="general">General News</option>
+                        <option value="pandemic">Health & Medical</option>
+                        <option value="geopolitical">Politics & Global Affairs</option>
+                        <option value="climate">Environment & Climate</option>
+                    </select>
+                </div>
+
+                <div class="helper-text">
+                    💡 Streaming mode shows real-time AI analysis. Standard mode provides a complete report instantly.
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-primary" onclick="checkClaimStreaming()" id="checkBtn">
+                        🔍 Verify with AI
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="checkClaimNormal()" id="normalBtn">
+                        📊 Quick Check
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="clearResults()">
+                        🗑️ Clear
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel panel--insights">
+            <div class="status-banner" id="statusBar">
+                <div class="status-indicator"></div>
+                <div class="status-copy">
+                    <span class="status-label">Verification Status</span>
+                    <span class="status-text">
+                        <span id="statusMessage">Ready to verify</span>
+                        <span class="status-spinner hidden" id="statusSpinner"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="insights-grid">
+                <article class="insight-card hidden" id="analysisSummary">
+                    <header>
+                        <div class="eyebrow">Verification Result</div>
+                        <h2 class="card-title" id="analysisTitle">No verification yet</h2>
+                        <p class="card-subtitle" id="analysisSubtitle">
+                            Submit a news claim to receive AI-powered fact-checking analysis.
+                        </p>
+                        <div class="badge-row">
+                            <span class="badge verdict-unverified" id="analysisVerdict">UNVERIFIED</span>
+                            <span class="badge badge--subtle" id="analysisConfidence">Confidence pending</span>
+                        </div>
+                    </header>
+
+                    <div class="analysis-meta">
+                        <div class="metric">
+                            <span class="metric-label">Processing Time</span>
+                            <span class="metric-value" id="analysisTime">—</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Claim</span>
+                            <span class="metric-value" id="analysisClaim">—</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Source</span>
+                            <span class="metric-value" id="analysisSource">No source provided</span>
+                        </div>
+                    </div>
+
+                    <div class="analysis-content" id="analysisContent"></div>
+                </article>
+
+                <article class="insight-card">
+                    <header>
+                        <div class="eyebrow">Analysis Timeline</div>
+                        <h2 class="card-title">AI Verification Process</h2>
+                        <p class="card-subtitle">
+                            Real-time tracking of verification stages with complete transparency.
+                        </p>
+                    </header>
+                    <div class="timeline" id="updatesContainer"></div>
+                </article>
+
+                <div class="metrics-grid" id="stats">
+                    <div class="metric-card">
+                        <span class="value" id="agentsCount">-</span>
+                        <span class="label">Active agents</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="value" id="processingTime">-</span>
+                        <span class="label">Elapsed time</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="value" id="modelProvider">-</span>
+                        <span class="label">Model provider</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let startTime;
+
+        const statusBar = document.getElementById('statusBar');
+        const statusMessage = document.getElementById('statusMessage');
+        const statusSpinner = document.getElementById('statusSpinner');
+
+        function setStatus(message, state = 'processing') {
+            statusMessage.textContent = message;
+            statusBar.dataset.state = state;
+
+            if (state === 'processing') {
+                statusBar.classList.add('is-active');
+                statusBar.classList.remove('is-error');
+                statusSpinner.classList.remove('hidden');
+            } else if (state === 'complete') {
+                statusBar.classList.add('is-active');
+                statusBar.classList.remove('is-error');
+                statusSpinner.classList.add('hidden');
+            } else if (state === 'error') {
+                statusBar.classList.remove('is-active');
+                statusBar.classList.add('is-error');
+                statusSpinner.classList.add('hidden');
+            } else {
+                statusBar.classList.remove('is-active');
+                statusBar.classList.remove('is-error');
+                statusSpinner.classList.add('hidden');
+            }
+        }
+
+        function escapeHTML(value) {
+            return value.replace(/[&<>"']/g, (char) => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            }[char] || char));
+        }
+
+        function formatMultilineContent(text) {
+            if (!text) return '—';
+            return escapeHTML(text)
+                .split('\\n')
+                .map(line => line.trim())
+                .filter(Boolean)
+                .join('<br>');
+        }
+
+        function formatAnalysisContent(text) {
+            if (!text) {
+                return '<p class="helper-text">No detailed analysis was returned by the agents.</p>';
+            }
+
+            const blocks = text.split(/\\n{2,}/).map(block => block.trim()).filter(Boolean);
+            if (!blocks.length) {
+                return '<p>' + escapeHTML(text.trim()) + '</p>';
+            }
+
+            return blocks.map(block => {
+                return '<p>' + escapeHTML(block).replace(/\\n/g, '<br>') + '</p>';
+            }).join('');
+        }
+
+        function truncateText(text, maxLength = 140) {
+            if (!text) return '—';
+            return text.length > maxLength ? text.slice(0, maxLength).trim() + '…' : text;
+        }
+
+        function renderAnalysisSummary(metadata = {}, content = '') {
+            const summaryCard = document.getElementById('analysisSummary');
+            const verdictBadge = document.getElementById('analysisVerdict');
+            const confidenceBadge = document.getElementById('analysisConfidence');
+            const processingValue = document.getElementById('analysisTime');
+            const claimValue = document.getElementById('analysisClaim');
+            const sourceValue = document.getElementById('analysisSource');
+            const contentContainer = document.getElementById('analysisContent');
+            const title = document.getElementById('analysisTitle');
+            const subtitle = document.getElementById('analysisSubtitle');
+
+            const verdict = (metadata.verdict || 'UNVERIFIED').toUpperCase();
+            const confidence = (metadata.confidence || 'MEDIUM').toUpperCase();
+            const processingTime = typeof metadata.processing_time_seconds === 'number'
+                ? metadata.processing_time_seconds.toFixed(2) + 's'
+                : (metadata.processing_time || '—');
+            const claim = metadata.claim || document.getElementById('claimText').value.trim();
+            const source = metadata.source || document.getElementById('sourceUrl').value.trim();
+
+            verdictBadge.textContent = verdict;
+            verdictBadge.className = 'badge verdict-' + verdict.toLowerCase();
+            confidenceBadge.textContent = confidence + ' confidence';
+            confidenceBadge.className = 'badge badge--subtle confidence-' + confidence.toLowerCase();
+            processingValue.textContent = processingTime || '—';
+            claimValue.textContent = claim ? '“' + truncateText(claim) + '”' : '—';
+            sourceValue.textContent = source ? truncateText(source) : 'No source provided';
+            contentContainer.innerHTML = formatAnalysisContent(content);
+
+            const verdictHeadlines = {
+                TRUE: '✓ News Verified as Accurate',
+                FALSE: '✗ News Identified as False',
+                DISPUTED: '⚠ Information Disputed',
+                UNVERIFIED: '? Unable to Verify Completely',
+                ERROR: 'Verification Unavailable'
+            };
+
+            title.textContent = verdictHeadlines[verdict] || 'Verification Complete';
+            subtitle.textContent = 'Review the detailed analysis, evidence sources, and credibility assessment below.';
+
+            summaryCard.classList.remove('hidden');
+            setStatus('Verification complete. Results ready.', 'complete');
+        }
+
+        async function checkClaimStreaming() {
+            const claimText = document.getElementById('claimText').value.trim();
+            const sourceUrl = document.getElementById('sourceUrl').value;
+
+            if (!claimText) {
+                alert('Please enter a news claim to verify');
+                return;
+            }
+
+            clearResults();
+            startTime = Date.now();
+
+            const checkBtn = document.getElementById('checkBtn');
+            const normalBtn = document.getElementById('normalBtn');
+
+            let encounteredError = false;
+
+            setStatus('AI verification in progress…', 'processing');
+            checkBtn.disabled = true;
+            normalBtn.disabled = true;
+
+            const data = {
+                claim_text: claimText,
+                source_url: sourceUrl,
+                crisis_category: document.getElementById('crisisType').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/check/stream`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.body) {
+                    throw new Error('Streaming is not supported by the server response.');
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    const text = decoder.decode(value, { stream: true });
+                    const lines = text.split('\\n').filter(line => line.trim());
+
+                    for (const line of lines) {
+                        try {
+                            const event = JSON.parse(line);
+                            handleStreamEvent(event);
+                        } catch (error) {
+                            console.error('Parse error:', error);
+                        }
+                    }
+                }
+            } catch (error) {
+                encounteredError = true;
+                addUpdate('error', 'System error', error.message);
+                setStatus('Verification failed. Please try again.', 'error');
+            } finally {
+                checkBtn.disabled = false;
+                normalBtn.disabled = false;
+
+                if (!encounteredError) {
+                    setStatus('Verification complete. Results ready.', 'complete');
+                }
+            }
+        }
+
+        async function checkClaimNormal() {
+            const claimText = document.getElementById('claimText').value.trim();
+            const sourceUrl = document.getElementById('sourceUrl').value;
+
+            if (!claimText) {
+                alert('Please enter a news claim to verify');
+                return;
+            }
+
+            clearResults();
+            startTime = Date.now();
+
+            const checkBtn = document.getElementById('checkBtn');
+            const normalBtn = document.getElementById('normalBtn');
+            let encounteredError = false;
+
+            setStatus('Quick verification in progress…', 'processing');
+            checkBtn.disabled = true;
+            normalBtn.disabled = true;
+
+            const data = {
+                claim_text: claimText,
+                source_url: sourceUrl,
+                crisis_category: document.getElementById('crisisType').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/check`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.json();
+                    throw new Error(errorBody.detail || 'Failed to process claim');
+                }
+
+                const result = await response.json();
+                displayNormalResult(result);
+            } catch (error) {
+                encounteredError = true;
+                addUpdate('error', 'System error', error.message);
+                setStatus('Verification failed. Please try again.', 'error');
+            } finally {
+                checkBtn.disabled = false;
+                normalBtn.disabled = false;
+
+                if (!encounteredError) {
+                    setStatus('Verification complete. Results ready.', 'complete');
+                }
+            }
+        }
+
+        function handleStreamEvent(event) {
+            switch (event.type) {
+                case 'start':
+                    addUpdate('start', 'Session initiated', event.content);
+                    break;
+                case 'phase':
+                    setStatus(event.content, 'processing');
+                    addUpdate('phase', 'Phase update', event.content);
+                    break;
+                case 'agent_start':
+                    addUpdate('agent_start', event.agent_name || 'Agent', event.content);
+                    break;
+                case 'agent_update':
+                    addUpdate('agent_update', event.agent_name || 'Agent update', event.content);
+                    break;
+                case 'agent_complete':
+                    addUpdate('agent_complete', event.agent_name || 'Agent', event.content);
+                    break;
+                case 'final_result':
+                    displayStreamResult(event);
+                    addUpdate('final_result', 'Final verdict received', 'Comprehensive report ready below.');
+                    break;
+                case 'complete':
+                    addUpdate('complete', 'Process completed', event.content);
+                    updateStats();
+                    break;
+                case 'error':
+                    addUpdate('error', 'Agent error', event.content);
+                    setStatus('An error occurred during analysis.', 'error');
+                    break;
+                default:
+                    console.warn('Unhandled event type', event.type);
+            }
+        }
+
+        function addUpdate(type, title, content) {
+            const container = document.getElementById('updatesContainer');
+            const entry = document.createElement('div');
+            entry.className = `timeline-entry type-${type}`;
+            entry.innerHTML = `
+                <div class="entry-header">
+                    <span class="entry-title">${escapeHTML(title)}</span>
+                    <span class="entry-time">${new Date().toLocaleTimeString()}</span>
+                </div>
+                <div class="entry-body">${formatMultilineContent(content)}</div>
+            `;
+            container.appendChild(entry);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function displayStreamResult(event) {
+            const metadata = event.metadata || {};
+            renderAnalysisSummary(metadata, event.content);
+        }
+
+        function displayNormalResult(result) {
+            const processingTime = ((Date.now() - startTime) / 1000).toFixed(2);
+
+            const sections = [];
+            if (result.public_summary) {
+                sections.push(`Public Summary:\\n${result.public_summary}`);
+            }
+            if (result.evidence_summary) {
+                sections.push(`Evidence Summary:\\n${result.evidence_summary}`);
+            }
+            if (result.reasoning_chain) {
+                sections.push(`Reasoning:\\n${result.reasoning_chain}`);
+            }
+
+            renderAnalysisSummary(
+                {
+                    verdict: result.verdict,
+                    confidence: result.confidence,
+                    processing_time_seconds: Number(result.processing_time_seconds || processingTime),
+                    claim: result.claim_text,
+                    source: result.source_url
+                },
+                sections.join('\\n\\n')
+            );
+
+            addUpdate('final_result', 'Final verdict received', 'Comprehensive report ready below.');
+            addUpdate('complete', 'Process completed', `Fact-check completed in ${processingTime}s`);
+            updateStats();
+        }
+
+        function clearResults() {
+            document.getElementById('updatesContainer').innerHTML = '';
+            document.getElementById('stats').style.display = 'none';
+
+            const summaryCard = document.getElementById('analysisSummary');
+            summaryCard.classList.add('hidden');
+            document.getElementById('analysisContent').innerHTML = '';
+            document.getElementById('analysisClaim').textContent = '—';
+            document.getElementById('analysisSource').textContent = 'No source provided';
+            document.getElementById('analysisTime').textContent = '—';
+            document.getElementById('analysisTitle').textContent = 'No verification yet';
+            document.getElementById('analysisSubtitle').textContent = 'Submit a news claim to receive AI-powered fact-checking analysis.';
+            document.getElementById('analysisVerdict').className = 'badge verdict-unverified';
+            document.getElementById('analysisVerdict').textContent = 'UNVERIFIED';
+            document.getElementById('analysisConfidence').className = 'badge badge--subtle';
+            document.getElementById('analysisConfidence').textContent = 'Confidence pending';
+
+            setStatus('Ready to verify', 'idle');
+        }
+
+        async function updateStats() {
+            try {
+                const response = await fetch(`${API_BASE}/stats`);
+                if (!response.ok) return;
+
+                const stats = await response.json();
+
+                document.getElementById('agentsCount').textContent = stats.agents.active;
+                document.getElementById('processingTime').textContent =
+                    ((Date.now() - startTime) / 1000).toFixed(2) + 's';
+                document.getElementById('modelProvider').textContent =
+                    stats.model.provider.toUpperCase();
+
+                const statsGrid = document.getElementById('stats');
+                statsGrid.style.display = 'grid';
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+            }
+        }
+
+        window.onload = () => {
+            setStatus('Ready to verify', 'idle');
+        };
+    </script>
+</body>
+
+</html>
