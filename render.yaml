@@ -1,0 +1,49 @@
+services:
+  # Web Service (FastAPI Backend)
+  - type: web
+    name: news-verification-api
+    runtime: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn api:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: APP_ENV
+        value: production
+      - key: CORS_ORIGINS
+        value: https://news-verification-api.onrender.com
+      - fromGroup: news-verification-secrets
+
+  # PostgreSQL Database (optional - for storing fact check results)
+  - type: pserv
+    name: news-verification-db
+    databaseName: news_verification
+    user: news_verification_user
+    plan: free
+    ipAllowList: []
+
+# Environment Groups for secrets
+envVarGroups:
+  - name: news-verification-secrets
+    envVars:
+      - key: NEWSAPI_KEY
+        generateValue: false
+        sync: false
+      - key: OPENAI_API_KEY
+        generateValue: false
+        sync: false
+      - key: GOOGLE_FACTCHECK_KEY
+        generateValue: false
+        sync: false
+      - key: CHROMA_DB_PATH
+        value: ./data/chroma_db
+      - key: LLM_MODEL
+        value: gpt-4o-mini
+      - key: EMBEDDING_MODEL
+        value: text-embedding-3-large
+      - key: MAX_ARTICLES_PER_QUERY
+        value: "100"
+      - key: SIMILARITY_THRESHOLD
+        value: "0.80"
