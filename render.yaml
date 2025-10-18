@@ -11,7 +11,7 @@ services:
       - key: PYTHON_VERSION
         value: 3.11.0
       - key: APP_ENV
-        value: production
+        value: development  # Change this
       - key: CORS_ORIGINS
         value: https://news-verification-api.onrender.com
       - fromGroup: news-verification-secrets
