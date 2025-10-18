@@ -6,3 +6,5 @@ agno
 anthropic
 openai
 httpx
+ddgs
+google-search-results
