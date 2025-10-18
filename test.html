@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API Output</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .badge-true {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .badge-false {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-disputed {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-unverified {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .section-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>API Output Test</h1>
+    <div id="result-container"></div>
+
+    <script>
+        // Sample API output provided by user
+        const apiOutput = {
+            "verdict": "UNVERIFIED",
+            "confidence": "MEDIUM",
+            "claim_text": "pm of india is best",
+            "source_url": "string",
+            "credibility_score": 0.5,
+            "reasoning_chain": "**\n- The claim that the \"PM of India is the best\" is inherently subjective. Determining who is the \"best\" involves personal opinions and biases, which vary widely among individuals and groups.\n- Different criteria might include economic growth under their governance, leadership capabilities, foreign policy success, social reforms, etc.\n- Such assessments are often influenced by political affiliations, cultural viewpoints, and personal values.",
+            "evidence_summary": "**",
+            "public_summary": "**\nThe claim that the Prime Minister of India is unequivocally \"the best\" is subjective and depends on various factors, including personal views and different criteria. Surveys and opinions differ significantly about which Prime Minister might be considered the best, often influenced by political and personal biases. Therefore, it's not possible to confirm any single Prime Minister as the best factually.",
+            "full_analysis": "### Fact-Check Report\n\n**Claim:** The Prime Minister of India is the best.\n\n**Conclusion:** Disputed\n\n**Confidence Level:** High\n\n**Reasoning:**\n- The claim that the \"PM of India is the best\" is inherently subjective. Determining who is the \"best\" involves personal opinions and biases, which vary widely among individuals and groups.\n- Different criteria might include economic growth under their governance, leadership capabilities, foreign policy success, social reforms, etc.\n- Such assessments are often influenced by political affiliations, cultural viewpoints, and personal values.\n\n**Evidence:**\n1. **Surveys and Polls:**\n   - A survey from \"India Today-CVoter\" reported that a significant number of respondents viewed Narendra Modi as India's best Prime Minister. [IndiaTracker](https://www.indiatracker.in/story/best-prime-minister-modi-beats-nehru-and-indira-)\n   \n2. **Subjective Evaluations:**\n   - Lists and opinions on the \"best\" Prime Minister differ widely across sources. For instance, [WorldBlaze](https://www.worldblaze.in/top-10-best-and-greatest-prime-minister-of-india-ever/) provides a historical assessment of Prime Ministers without declaring a single \"best\" leader.\n   - [Fingerprint News](https://fingerprintnews.in/indias-prime-ministers-the-best-the-worst-and-their-legacy) emphasizes that the concept of the \"best\" Prime Minister is subjective, reflected by factors like economic policies and crisis leadership.\n\n**Public Summary:**\nThe claim that the Prime Minister of India is unequivocally \"the best\" is subjective and depends on various factors, including personal views and different criteria. Surveys and opinions differ significantly about which Prime Minister might be considered the best, often influenced by political and personal biases. Therefore, it's not possible to confirm any single Prime Minister as the best factually.",
+            "sources_checked": 3,
+            "key_findings": [
+                "The claim that the \"PM of India is the best\" is inherently subjective. Determining who is the \"best\" involves personal opinions and biases, which vary widely among individuals and groups.",
+                "Different criteria might include economic growth under their governance, leadership capabilities, foreign policy success, social reforms, etc.",
+                "Such assessments are often influenced by political affiliations, cultural viewpoints, and personal values.",
+                "Surveys and Polls:**",
+                "A survey from \"India Today-CVoter\" reported that a significant number of respondents viewed Narendra Modi as India's best Prime Minister. [IndiaTracker](https://www.indiatracker.in/story/best-prime-mi"
+            ]
+        };
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function renderResult(result, metadata = null) {
+            console.log('Rendering result:', result, 'metadata:', metadata);
+
+            const card = document.getElementById('analysisSummary');
+            const verdictBadge = document.getElementById('analysisVerdict');
+            const confidenceBadge = document.getElementById('analysisConfidence');
+            const timeValue = document.getElementById('analysisTime');
+            const sourcesValue = document.getElementById('analysisSources');
+            const credibilityValue = document.getElementById('analysisCredibility');
+            const content = document.getElementById('analysisContent');
+
+            // Handle case where result might be a string (JSON)
+            if (typeof result === 'string') {
+                try {
+                    result = JSON.parse(result);
+                } catch (e) {
+                    console.error('Failed to parse result as JSON:', e);
+                }
+            }
+
+            // Helper function to clean content
+            function cleanContent(text) {
+                if (!text || typeof text !== 'string') return '';
+                // Remove leading ** and whitespace, but keep the actual content
+                return text.replace(/^\*\*\s*\n?/, '').trim();
+            }
+
+            // Helper function to check if content is valid
+            function hasValidContent(text) {
+                const cleaned = cleanContent(text);
+                return cleaned && cleaned.length > 5 && cleaned !== '**';
+            }
+
+            // Update badges - use metadata if available, otherwise use result
+            const verdict = (metadata && metadata.verdict) || result.verdict || 'UNVERIFIED';
+            verdictBadge.textContent = verdict;
+            verdictBadge.className = `badge verdict-${verdict.toLowerCase()}`;
+
+            const confidence = (metadata && metadata.confidence) || result.confidence || 'MEDIUM';
+            confidenceBadge.textContent = `${confidence} confidence`;
+            confidenceBadge.className = 'badge badge--subtle';
+
+            // Update metrics - use metadata if available
+            const processingTime = (metadata && metadata.processing_time_seconds) || result.processing_time_seconds || ((Date.now() - startTime) / 1000);
+            timeValue.textContent = `${processingTime.toFixed(2)}s`;
+            sourcesValue.textContent = String(result.sources_checked || 0);
+            credibilityValue.textContent = result.credibility_score
+                ? `${(result.credibility_score * 100).toFixed(0)}%`
+                : '50%';
+
+            // Build content sections
+            let contentHTML = '';
+
+            // Public Summary
+            if (hasValidContent(result.public_summary)) {
+                const cleanedSummary = cleanContent(result.public_summary);
+                contentHTML += `
+            <div class="content-section">
+                <div class="section-title">📋 Public Summary</div>
+                <div class="section-body">${escapeHTML(cleanedSummary)}</div>
+            </div>
+        `;
+            }
+
+            // Evidence Summary
+            if (hasValidContent(result.evidence_summary)) {
+                let evidenceText = cleanContent(result.evidence_summary);
+                // Simple markdown link conversion
+                evidenceText = evidenceText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color: var(--accent); text-decoration: underline;">$1</a>');
+
+                contentHTML += `
+            <div class="content-section">
+                <div class="section-title">🔍 Evidence Summary</div>
+                <div class="section-body">${evidenceText}</div>
+            </div>
+        `;
+            }
+
+            // Full Analysis (if evidence summary is empty but full analysis exists)
+            if (!hasValidContent(result.evidence_summary) && hasValidContent(result.full_analysis)) {
+                let analysisText = cleanContent(result.full_analysis);
+                // Convert markdown links
+                analysisText = analysisText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color: var(--accent); text-decoration: underline;">$1</a>');
+                // Convert markdown headers to simple bold
+                analysisText = analysisText.replace(/### (.+)/g, '<strong>$1</strong>');
+                analysisText = analysisText.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+                contentHTML += `
+            <div class="content-section">
+                <div class="section-title">📄 Full Analysis</div>
+                <div class="section-body">${analysisText}</div>
+            </div>
+        `;
+            }
+
+            // Reasoning Chain
+            if (hasValidContent(result.reasoning_chain)) {
+                const cleanedReasoning = cleanContent(result.reasoning_chain);
+                contentHTML += `
+            <div class="content-section">
+                <div class="section-title">🧠 Reasoning Chain</div>
+                <div class="section-body">${escapeHTML(cleanedReasoning)}</div>
+            </div>
+        `;
+            }
+
+            // Key Findings
+            if (result.key_findings && Array.isArray(result.key_findings) && result.key_findings.length > 0) {
+                // Filter out incomplete, empty, or malformed findings
+                const validFindings = result.key_findings.filter(finding => {
+                    if (!finding || typeof finding !== 'string') return false;
+                    const cleaned = finding.trim();
+                    return cleaned.length > 15 &&
+                        !cleaned.includes('**') &&
+                        !cleaned.endsWith('...') &&
+                        !cleaned.includes('[') && // Avoid truncated markdown links
+                        cleaned.split(' ').length > 3; // Must have more than 3 words
+                });
+
+                if (validFindings.length > 0) {
+                    contentHTML += `
+                <div class="content-section">
+                    <div class="section-title">💡 Key Findings</div>
+                    <div class="key-findings">
+                        ${validFindings.map((finding, i) => `
+                            <div class="finding-item">
+                                <span class="finding-bullet">${i + 1}.</span>
+                                <span class="finding-text">${escapeHTML(finding)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+                }
+            }
+
+            // If no content was generated, show a fallback
+            if (!contentHTML) {
+                contentHTML = `
+            <div class="content-section">
+                <div class="section-title">ℹ️ Analysis Result</div>
+                <div class="section-body">
+                    Verdict: ${verdict}<br>
+                    Confidence: ${confidence}<br>
+                    ${result.claim_text ? `Claim analyzed: "${result.claim_text}"` : ''}
+                </div>
+            </div>
+        `;
+            }
+
+            content.innerHTML = contentHTML;
+            card.classList.remove('hidden');
+            setStatus('Verification complete', 'complete');
+
+            console.log('Result rendered successfully');
+        }
+
+        // Render the result when page loads
+        window.onload = () => renderResult(apiOutput);
+    </script>
+</body>
+
+</html>

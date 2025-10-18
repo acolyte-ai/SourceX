@@ -32,7 +32,6 @@
             --disputed: #f59e0b;
             --unverified: #6366f1;
             --shadow-sm: 0 8px 32px rgba(0, 0, 0, 0.4);
-            --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.15);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
@@ -59,19 +58,6 @@
             width: 800px;
             height: 800px;
             background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        body::after {
-            content: "";
-            position: fixed;
-            bottom: -30%;
-            left: -10%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
@@ -105,37 +91,21 @@
             font-weight: 700;
             font-size: 1.5rem;
             font-family: 'Space Grotesk', sans-serif;
-            letter-spacing: -0.02em;
             box-shadow: 0 8px 32px rgba(99, 102, 241, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-            position: relative;
-        }
-
-        .brand-mark::before {
-            content: "";
-            position: absolute;
-            inset: -2px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.5), transparent);
-            z-index: -1;
-            filter: blur(8px);
-            opacity: 0.6;
         }
 
         .brand h1 {
             font-size: 2rem;
             font-weight: 700;
             font-family: 'Space Grotesk', sans-serif;
-            letter-spacing: -0.03em;
             background: linear-gradient(135deg, #e2e8f0 0%, #a5b4fc 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .brand p {
             color: var(--text-secondary);
             margin-top: 6px;
-            line-height: 1.5;
             font-size: 0.95rem;
         }
 
@@ -149,7 +119,6 @@
             padding: 10px 20px;
             font-size: 0.85rem;
             font-weight: 600;
-            letter-spacing: 0.02em;
             border: 1px solid var(--border);
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         }
@@ -160,7 +129,6 @@
             height: 8px;
             border-radius: 50%;
             background: var(--accent);
-            box-shadow: 0 0 8px var(--accent-glow);
             animation: pulse-dot 2s infinite;
         }
 
@@ -195,22 +163,6 @@
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--border);
             overflow: hidden;
-            backdrop-filter: blur(10px);
-            position: relative;
-        }
-
-        .panel::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: 20px;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), transparent);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask-composite: exclude;
-            pointer-events: none;
         }
 
         .panel--input {
@@ -228,8 +180,6 @@
             font-size: 1.35rem;
             font-weight: 600;
             font-family: 'Space Grotesk', sans-serif;
-            color: var(--text-primary);
-            letter-spacing: -0.02em;
         }
 
         .panel__header p {
@@ -272,13 +222,8 @@
         input:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-soft), 0 8px 24px rgba(99, 102, 241, 0.15);
+            box-shadow: 0 0 0 3px var(--accent-soft);
             background: var(--surface-elevated);
-        }
-
-        textarea::placeholder,
-        input::placeholder {
-            color: var(--text-muted);
         }
 
         textarea {
@@ -300,43 +245,22 @@
             padding: 14px 20px;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        button::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        button:hover::before {
-            opacity: 1;
         }
 
         button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            box-shadow: none !important;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
             color: #fff;
             box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .btn-primary:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.4), 0 0 40px rgba(99, 102, 241, 0.2);
-        }
-
-        .btn-primary:active:not(:disabled) {
-            transform: translateY(0);
+            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.4);
         }
 
         .btn-secondary {
@@ -348,12 +272,6 @@
         .btn-secondary:hover:not(:disabled) {
             background: var(--surface-muted);
             border-color: var(--border-bright);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary:active:not(:disabled) {
-            transform: translateY(0);
         }
 
         .panel--insights {
@@ -372,56 +290,24 @@
             padding: 20px 28px;
             background: var(--surface-elevated);
             transition: all 0.3s ease;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         }
 
         .status-banner.is-active {
             border-color: var(--accent);
             background: rgba(99, 102, 241, 0.12);
-            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2);
         }
 
         .status-banner.is-error {
             border-color: var(--error);
             background: rgba(239, 68, 68, 0.12);
-            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.2);
         }
 
         .status-indicator {
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            position: relative;
             background: var(--accent);
-            box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.6);
             animation: pulse 2.4s infinite;
-        }
-
-        .status-banner.is-error .status-indicator {
-            background: var(--error);
-            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
-        }
-
-        .status-copy {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .status-label {
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            letter-spacing: 0.14em;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        .status-text {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            color: var(--text-primary);
         }
 
         .status-spinner {
@@ -433,12 +319,6 @@
             animation: spin 1s linear infinite;
         }
 
-        .insights-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
         .insight-card {
             border: 1px solid var(--border);
             border-radius: 18px;
@@ -447,18 +327,6 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .insight-card:hover {
-            border-color: var(--border-bright);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-
-        .insight-card header {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
         }
 
         .eyebrow {
@@ -493,11 +361,32 @@
             padding: 8px 16px;
             font-size: 0.8rem;
             font-weight: 600;
-            letter-spacing: 0.04em;
             text-transform: uppercase;
-            background: rgba(71, 85, 105, 0.15);
-            color: var(--text-primary);
-            border: 1px solid rgba(71, 85, 105, 0.2);
+        }
+
+        .badge.verdict-true {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--true);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge.verdict-false {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--false);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .badge.verdict-disputed {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--disputed);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .badge.verdict-unverified,
+        .badge.verdict-error {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--unverified);
+            border: 1px solid rgba(99, 102, 241, 0.3);
         }
 
         .badge--subtle {
@@ -506,37 +395,9 @@
             border: 1px solid rgba(71, 85, 105, 0.15);
         }
 
-        .badge.verdict-true {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--true);
-            border-color: rgba(16, 185, 129, 0.3);
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.15);
-        }
-
-        .badge.verdict-false {
-            background: rgba(239, 68, 68, 0.15);
-            color: var(--false);
-            border-color: rgba(239, 68, 68, 0.3);
-            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.15);
-        }
-
-        .badge.verdict-disputed {
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--disputed);
-            border-color: rgba(245, 158, 11, 0.3);
-            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.15);
-        }
-
-        .badge.verdict-unverified {
-            background: rgba(99, 102, 241, 0.15);
-            color: var(--unverified);
-            border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
-        }
-
         .analysis-meta {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 16px;
         }
 
@@ -545,15 +406,6 @@
             border-radius: 14px;
             background: var(--surface-muted);
             border: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .metric:hover {
-            border-color: var(--border-bright);
-            background: var(--surface);
         }
 
         .metric-label {
@@ -562,27 +414,77 @@
             letter-spacing: 0.1em;
             color: var(--text-muted);
             font-weight: 600;
+            margin-bottom: 8px;
         }
 
         .metric-value {
             font-weight: 600;
             color: var(--text-primary);
             line-height: 1.4;
+            word-break: break-word;
         }
 
         .analysis-content {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            color: var(--text-secondary);
-            line-height: 1.55;
+            gap: 16px;
         }
 
-        .analysis-content p {
+        .content-section {
             background: var(--surface-muted);
             border-radius: 12px;
-            padding: 16px 18px;
+            padding: 18px 20px;
             border: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 10px;
+        }
+
+        .section-body {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .section-body a {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        .section-body a:hover {
+            color: var(--accent-strong);
+        }
+
+        .key-findings {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .finding-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--surface);
+            border-radius: 10px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .finding-bullet {
+            color: var(--accent);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .finding-text {
+            color: var(--text-secondary);
+            line-height: 1.5;
         }
 
         .timeline {
@@ -591,7 +493,6 @@
             gap: 12px;
             max-height: 420px;
             overflow-y: auto;
-            padding-right: 4px;
         }
 
         .timeline-entry {
@@ -599,16 +500,7 @@
             border: 1px solid var(--border);
             background: var(--surface-muted);
             padding: 16px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
             position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .timeline-entry:hover {
-            border-color: var(--border-bright);
-            background: var(--surface-elevated);
         }
 
         .timeline-entry::before {
@@ -620,55 +512,14 @@
             height: 10px;
             border-radius: 50%;
             background: var(--accent);
-            box-shadow: 0 0 12px currentColor;
             border: 2px solid var(--surface);
-        }
-
-        .timeline-entry.type-start::before {
-            background: var(--accent);
-            color: var(--accent-glow);
-        }
-
-        .timeline-entry.type-phase::before {
-            background: var(--warning);
-            color: rgba(245, 158, 11, 0.3);
-        }
-
-        .timeline-entry.type-agent_start::before {
-            background: var(--accent);
-            color: var(--accent-glow);
-        }
-
-        .timeline-entry.type-agent_update::before {
-            background: var(--accent-strong);
-            color: rgba(79, 70, 229, 0.3);
-        }
-
-        .timeline-entry.type-agent_complete::before {
-            background: var(--success);
-            color: rgba(16, 185, 129, 0.3);
-        }
-
-        .timeline-entry.type-final_result::before {
-            background: var(--true);
-            color: rgba(16, 185, 129, 0.3);
-        }
-
-        .timeline-entry.type-complete::before {
-            background: var(--true);
-            color: rgba(16, 185, 129, 0.3);
-        }
-
-        .timeline-entry.type-error::before {
-            background: var(--error);
-            color: rgba(239, 68, 68, 0.3);
         }
 
         .entry-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             gap: 12px;
+            margin-bottom: 8px;
         }
 
         .entry-title {
@@ -686,45 +537,32 @@
             line-height: 1.5;
         }
 
-        .metrics-grid {
-            display: none;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 16px;
-        }
-
-        .metric-card {
-            padding: 18px 20px;
-            border-radius: 14px;
-            background: var(--surface-muted);
-            border: 1px solid rgba(226, 232, 240, 0.6);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .metric-card .value {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .metric-card .label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .helper-text {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-            background: var(--surface-muted);
-            padding: 12px 16px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-        }
-
         .hidden {
             display: none !important;
+        }
+
+        /* Debug panel styles */
+        .debug-panel {
+            background: var(--surface-muted);
+            border: 1px solid var(--warning);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+        }
+
+        .debug-title {
+            color: var(--warning);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .debug-content {
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
         }
 
         @keyframes pulse {
@@ -748,36 +586,12 @@
         }
 
         @media (max-width: 1080px) {
-            body {
-                padding: 32px 20px 48px;
-            }
-
             .layout {
                 grid-template-columns: 1fr;
             }
 
             .panel--input {
                 position: static;
-            }
-        }
-
-        @media (max-width: 640px) {
-            body {
-                padding: 24px 16px 40px;
-            }
-
-            .top-bar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .panel__header,
-            .form {
-                padding: 20px;
-            }
-
-            button {
-                padding: 12px 16px;
             }
         }
     </style>
@@ -789,7 +603,7 @@
             <div class="brand-mark">SX</div>
             <div>
                 <h1>SourceX</h1>
-                <p>AI-powered news verification and fact-checking platform for trusted journalism.</p>
+                <p>AI-powered news verification and fact-checking platform.</p>
             </div>
         </div>
         <span class="meta-chip">Live Platform</span>
@@ -799,23 +613,22 @@
         <section class="panel panel--input">
             <div class="panel__header">
                 <h2>Verify News Article</h2>
-                <p>Enter the news claim and source URL. Select a category to enhance verification accuracy.</p>
+                <p>Enter the news claim and source URL for AI-powered verification.</p>
             </div>
 
             <div class="form">
                 <div class="input-group">
                     <label for="claimText">News Claim</label>
-                    <textarea id="claimText"
-                        placeholder="Enter the news claim you want to verify, e.g., &quot;Scientists discover breakthrough treatment with 95% success rate&quot;"></textarea>
+                    <textarea id="claimText" placeholder="Enter the claim to verify..."></textarea>
                 </div>
 
                 <div class="input-group">
-                    <label for="sourceUrl">Source URL</label>
-                    <input type="url" id="sourceUrl" placeholder="https://newssite.com/article-url" />
+                    <label for="sourceUrl">Source URL (optional)</label>
+                    <input type="url" id="sourceUrl" placeholder="https://example.com/article" />
                 </div>
 
                 <div class="input-group">
-                    <label for="crisisType">News Category</label>
+                    <label for="crisisType">Category</label>
                     <select id="crisisType">
                         <option value="general">General News</option>
                         <option value="pandemic">Health & Medical</option>
@@ -824,25 +637,25 @@
                     </select>
                 </div>
 
-                <div class="helper-text">
-                    💡 Streaming mode shows real-time AI analysis. Standard mode provides a complete report instantly.
-                </div>
-
                 <div class="button-group">
-                    <button type="button" class="btn-primary" onclick="checkClaimStreaming()" id="checkBtn">
+                    <button class="btn-primary" onclick="checkClaim()" id="checkBtn">
                         🔍 Verify with AI
                     </button>
-                    <button type="button" class="btn-secondary" onclick="checkClaimNormal()" id="normalBtn">
-                        📊 Quick Check
-                    </button>
-                    <button type="button" class="btn-secondary" onclick="clearResults()">
+                    <button class="btn-secondary" onclick="clearResults()">
                         🗑️ Clear
                     </button>
                 </div>
+
+
             </div>
         </section>
 
         <section class="panel panel--insights">
+            <!-- <div class="debug-panel hidden" id="debugPanel">
+                <div class="debug-title">Debug Information</div>
+                <div class="debug-content" id="debugContent">Debug mode enabled. Information will appear here...</div>
+            </div> -->
+
             <div class="status-banner" id="statusBar">
                 <div class="status-indicator"></div>
                 <div class="status-copy">
@@ -858,28 +671,26 @@
                 <article class="insight-card hidden" id="analysisSummary">
                     <header>
                         <div class="eyebrow">Verification Result</div>
-                        <h2 class="card-title" id="analysisTitle">No verification yet</h2>
-                        <p class="card-subtitle" id="analysisSubtitle">
-                            Submit a news claim to receive AI-powered fact-checking analysis.
-                        </p>
+                        <h2 class="card-title" id="analysisTitle">Analysis Complete</h2>
+                        <p class="card-subtitle" id="analysisSubtitle">Review the findings below.</p>
                         <div class="badge-row">
-                            <span class="badge verdict-unverified" id="analysisVerdict">UNVERIFIED</span>
-                            <span class="badge badge--subtle" id="analysisConfidence">Confidence pending</span>
+                            <span class="badge" id="analysisVerdict">UNVERIFIED</span>
+                            <span class="badge badge--subtle" id="analysisConfidence">—</span>
                         </div>
                     </header>
 
                     <div class="analysis-meta">
                         <div class="metric">
-                            <span class="metric-label">Processing Time</span>
-                            <span class="metric-value" id="analysisTime">—</span>
+                            <div class="metric-label">Processing Time</div>
+                            <div class="metric-value" id="analysisTime">—</div>
                         </div>
                         <div class="metric">
-                            <span class="metric-label">Claim</span>
-                            <span class="metric-value" id="analysisClaim">—</span>
+                            <div class="metric-label">Sources Checked</div>
+                            <div class="metric-value" id="analysisSources">—</div>
                         </div>
                         <div class="metric">
-                            <span class="metric-label">Source</span>
-                            <span class="metric-value" id="analysisSource">No source provided</span>
+                            <div class="metric-label">Credibility Score</div>
+                            <div class="metric-value" id="analysisCredibility">—</div>
                         </div>
                     </div>
 
@@ -890,27 +701,10 @@
                     <header>
                         <div class="eyebrow">Analysis Timeline</div>
                         <h2 class="card-title">AI Verification Process</h2>
-                        <p class="card-subtitle">
-                            Real-time tracking of verification stages with complete transparency.
-                        </p>
+                        <p class="card-subtitle">Real-time tracking of verification stages.</p>
                     </header>
                     <div class="timeline" id="updatesContainer"></div>
                 </article>
-
-                <div class="metrics-grid" id="stats">
-                    <div class="metric-card">
-                        <span class="value" id="agentsCount">-</span>
-                        <span class="label">Active agents</span>
-                    </div>
-                    <div class="metric-card">
-                        <span class="value" id="processingTime">-</span>
-                        <span class="label">Elapsed time</span>
-                    </div>
-                    <div class="metric-card">
-                        <span class="value" id="modelProvider">-</span>
-                        <span class="label">Model provider</span>
-                    </div>
-                </div>
             </div>
         </section>
     </main>
@@ -918,14 +712,68 @@
     <script>
         const API_BASE = 'http://localhost:8000';
         let startTime;
+        let debugMode = false;
 
-        const statusBar = document.getElementById('statusBar');
-        const statusMessage = document.getElementById('statusMessage');
-        const statusSpinner = document.getElementById('statusSpinner');
+        function debugLog(message, data = null) {
+            console.log(`[DEBUG] ${message}`, data);
+            if (debugMode) {
+                const debugContent = document.getElementById('debugContent');
+                const timestamp = new Date().toLocaleTimeString();
+                debugContent.textContent += `[${timestamp}] ${message}\n`;
+                if (data) {
+                    debugContent.textContent += `Data: ${JSON.stringify(data, null, 2)}\n`;
+                }
+                debugContent.textContent += '\n';
+                debugContent.scrollTop = debugContent.scrollHeight;
+            }
+        }
 
-        function setStatus(message, state = 'processing') {
+        function toggleDebug() {
+            debugMode = !debugMode;
+            const debugPanel = document.getElementById('debugPanel');
+            const debugBtn = document.getElementById('debugBtn');
+
+            if (debugMode) {
+                debugPanel.classList.remove('hidden');
+                debugBtn.textContent = '🐛 Hide Debug';
+                debugLog('Debug mode enabled');
+            } else {
+                debugPanel.classList.add('hidden');
+                debugBtn.textContent = '🐛 Show Debug';
+            }
+        }
+
+        function testWithSampleData() {
+            debugLog('Testing with sample data');
+            const sampleData = {
+                "verdict": "UNVERIFIED",
+                "confidence": "MEDIUM",
+                "claim_text": "pm of india is best",
+                "source_url": "string",
+                "credibility_score": 0.5,
+                "reasoning_chain": "**\n- The claim that the \"PM of India is the best\" is inherently subjective. Determining who is the \"best\" involves personal opinions and biases, which vary widely among individuals and groups.\n- Different criteria might include economic growth under their governance, leadership capabilities, foreign policy success, social reforms, etc.\n- Such assessments are often influenced by political affiliations, cultural viewpoints, and personal values.",
+                "evidence_summary": "**",
+                "public_summary": "**\nThe claim that the Prime Minister of India is unequivocally \"the best\" is subjective and depends on various factors, including personal views and different criteria. Surveys and opinions differ significantly about which Prime Minister might be considered the best, often influenced by political and personal biases. Therefore, it's not possible to confirm any single Prime Minister as the best factually.",
+                "full_analysis": "### Fact-Check Report\n\n**Claim:** The Prime Minister of India is the best.\n\n**Conclusion:** Disputed\n\n**Confidence Level:** High\n\n**Reasoning:**\n- The claim that the \"PM of India is the best\" is inherently subjective. Determining who is the \"best\" involves personal opinions and biases, which vary widely among individuals and groups.\n- Different criteria might include economic growth under their governance, leadership capabilities, foreign policy success, social reforms, etc.\n- Such assessments are often influenced by political affiliations, cultural viewpoints, and personal values.",
+                "sources_checked": 3,
+                "key_findings": [
+                    "The claim that the \"PM of India is the best\" is inherently subjective. Determining who is the \"best\" involves personal opinions and biases, which vary widely among individuals and groups.",
+                    "Different criteria might include economic growth under their governance, leadership capabilities, foreign policy success, social reforms, etc.",
+                    "Such assessments are often influenced by political affiliations, cultural viewpoints, and personal values."
+                ]
+            };
+
+            renderResult(sampleData);
+            addUpdate('test', 'Sample Data Test', 'Rendered sample API response for testing');
+        }
+
+        function setStatus(message, state = 'idle') {
+            debugLog(`Status change: ${message} (${state})`);
+            const statusBar = document.getElementById('statusBar');
+            const statusMessage = document.getElementById('statusMessage');
+            const statusSpinner = document.getElementById('statusSpinner');
+
             statusMessage.textContent = message;
-            statusBar.dataset.state = state;
 
             if (state === 'processing') {
                 statusBar.classList.add('is-active');
@@ -940,130 +788,230 @@
                 statusBar.classList.add('is-error');
                 statusSpinner.classList.add('hidden');
             } else {
-                statusBar.classList.remove('is-active');
-                statusBar.classList.remove('is-error');
+                statusBar.classList.remove('is-active', 'is-error');
                 statusSpinner.classList.add('hidden');
             }
         }
 
-        function escapeHTML(value) {
-            return value.replace(/[&<>"']/g, (char) => ({
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            }[char] || char));
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
         }
 
-        function formatMultilineContent(text) {
-            if (!text) return '—';
-            return escapeHTML(text)
-                .split('\\n')
-                .map(line => line.trim())
-                .filter(Boolean)
-                .join('<br>');
+        function cleanContent(text) {
+            if (!text || typeof text !== 'string') return '';
+            return text.replace(/^\*\*\s*\n?/, '').trim();
         }
 
-        function formatAnalysisContent(text) {
-            if (!text) {
-                return '<p class="helper-text">No detailed analysis was returned by the agents.</p>';
-            }
-
-            const blocks = text.split(/\\n{2,}/).map(block => block.trim()).filter(Boolean);
-            if (!blocks.length) {
-                return '<p>' + escapeHTML(text.trim()) + '</p>';
-            }
-
-            return blocks.map(block => {
-                return '<p>' + escapeHTML(block).replace(/\\n/g, '<br>') + '</p>';
-            }).join('');
+        function hasValidContent(text) {
+            const cleaned = cleanContent(text);
+            debugLog(`Content validation: "${text?.substring(0, 50)}..." -> cleaned: "${cleaned?.substring(0, 50)}..." -> valid: ${cleaned && cleaned.length > 5}`);
+            return cleaned && cleaned.length > 5;
         }
 
-        function truncateText(text, maxLength = 140) {
-            if (!text) return '—';
-            return text.length > maxLength ? text.slice(0, maxLength).trim() + '…' : text;
-        }
+        function renderResult(result, metadata = null) {
+            debugLog('renderResult called', { result, metadata });
 
-        function renderAnalysisSummary(metadata = {}, content = '') {
-            const summaryCard = document.getElementById('analysisSummary');
+            const card = document.getElementById('analysisSummary');
             const verdictBadge = document.getElementById('analysisVerdict');
             const confidenceBadge = document.getElementById('analysisConfidence');
-            const processingValue = document.getElementById('analysisTime');
-            const claimValue = document.getElementById('analysisClaim');
-            const sourceValue = document.getElementById('analysisSource');
-            const contentContainer = document.getElementById('analysisContent');
-            const title = document.getElementById('analysisTitle');
-            const subtitle = document.getElementById('analysisSubtitle');
+            const timeValue = document.getElementById('analysisTime');
+            const sourcesValue = document.getElementById('analysisSources');
+            const credibilityValue = document.getElementById('analysisCredibility');
+            const content = document.getElementById('analysisContent');
 
-            const verdict = (metadata.verdict || 'UNVERIFIED').toUpperCase();
-            const confidence = (metadata.confidence || 'MEDIUM').toUpperCase();
-            const processingTime = typeof metadata.processing_time_seconds === 'number'
-                ? metadata.processing_time_seconds.toFixed(2) + 's'
-                : (metadata.processing_time || '—');
-            const claim = metadata.claim || document.getElementById('claimText').value.trim();
-            const source = metadata.source || document.getElementById('sourceUrl').value.trim();
+            // Handle case where result might be a string (JSON)
+            if (typeof result === 'string') {
+                try {
+                    result = JSON.parse(result);
+                    debugLog('Parsed result from string', result);
+                } catch (e) {
+                    debugLog('Failed to parse result as JSON', e);
+                    return;
+                }
+            }
+
+            // Update badges
+            const verdict = (metadata && metadata.verdict) || result.verdict || 'UNVERIFIED';
+            const confidence = (metadata && metadata.confidence) || result.confidence || 'MEDIUM';
+
+            debugLog(`Setting verdict: ${verdict}, confidence: ${confidence}`);
 
             verdictBadge.textContent = verdict;
-            verdictBadge.className = 'badge verdict-' + verdict.toLowerCase();
-            confidenceBadge.textContent = confidence + ' confidence';
-            confidenceBadge.className = 'badge badge--subtle confidence-' + confidence.toLowerCase();
-            processingValue.textContent = processingTime || '—';
-            claimValue.textContent = claim ? '“' + truncateText(claim) + '”' : '—';
-            sourceValue.textContent = source ? truncateText(source) : 'No source provided';
-            contentContainer.innerHTML = formatAnalysisContent(content);
+            verdictBadge.className = `badge verdict-${verdict.toLowerCase()}`;
+            confidenceBadge.textContent = `${confidence} confidence`;
+            confidenceBadge.className = 'badge badge--subtle';
 
-            const verdictHeadlines = {
-                TRUE: '✓ News Verified as Accurate',
-                FALSE: '✗ News Identified as False',
-                DISPUTED: '⚠ Information Disputed',
-                UNVERIFIED: '? Unable to Verify Completely',
-                ERROR: 'Verification Unavailable'
-            };
+            // Update metrics
+            const processingTime = (metadata && metadata.processing_time_seconds) || result.processing_time_seconds || ((Date.now() - startTime) / 1000);
+            timeValue.textContent = `${processingTime.toFixed(2)}s`;
+            sourcesValue.textContent = String(result.sources_checked || 0);
+            credibilityValue.textContent = result.credibility_score
+                ? `${(result.credibility_score * 100).toFixed(0)}%`
+                : '50%';
 
-            title.textContent = verdictHeadlines[verdict] || 'Verification Complete';
-            subtitle.textContent = 'Review the detailed analysis, evidence sources, and credibility assessment below.';
+            // Build content sections
+            let contentHTML = '';
+            let sectionsAdded = 0;
 
-            summaryCard.classList.remove('hidden');
-            setStatus('Verification complete. Results ready.', 'complete');
+            debugLog('Building content sections...');
+
+            // Public Summary
+            if (hasValidContent(result.public_summary)) {
+                const cleanedSummary = cleanContent(result.public_summary);
+                contentHTML += `
+                    <div class="content-section">
+                        <div class="section-title">📋 Public Summary</div>
+                        <div class="section-body">${escapeHTML(cleanedSummary)}</div>
+                    </div>
+                `;
+                sectionsAdded++;
+                debugLog('Added public summary section');
+            }
+
+            // Evidence Summary
+            if (hasValidContent(result.evidence_summary)) {
+                let evidenceText = cleanContent(result.evidence_summary);
+                evidenceText = evidenceText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color: var(--accent); text-decoration: underline;">$1</a>');
+
+                contentHTML += `
+                    <div class="content-section">
+                        <div class="section-title">🔍 Evidence Summary</div>
+                        <div class="section-body">${evidenceText}</div>
+                    </div>
+                `;
+                sectionsAdded++;
+                debugLog('Added evidence summary section');
+            }
+
+            // Full Analysis (if evidence summary is empty)
+            if (!hasValidContent(result.evidence_summary) && hasValidContent(result.full_analysis)) {
+                let analysisText = cleanContent(result.full_analysis);
+                analysisText = analysisText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color: var(--accent); text-decoration: underline;">$1</a>');
+                analysisText = analysisText.replace(/### (.+)/g, '<strong>$1</strong>');
+                analysisText = analysisText.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+                contentHTML += `
+                    <div class="content-section">
+                        <div class="section-title">📄 Full Analysis</div>
+                        <div class="section-body">${analysisText}</div>
+                    </div>
+                `;
+                sectionsAdded++;
+                debugLog('Added full analysis section');
+            }
+
+            // Reasoning Chain
+            if (hasValidContent(result.reasoning_chain)) {
+                const cleanedReasoning = cleanContent(result.reasoning_chain);
+                contentHTML += `
+                    <div class="content-section">
+                        <div class="section-title">🧠 Reasoning Chain</div>
+                        <div class="section-body">${escapeHTML(cleanedReasoning)}</div>
+                    </div>
+                `;
+                sectionsAdded++;
+                debugLog('Added reasoning chain section');
+            }
+
+            // Key Findings
+            if (result.key_findings && Array.isArray(result.key_findings) && result.key_findings.length > 0) {
+                const validFindings = result.key_findings.filter(finding => {
+                    if (!finding || typeof finding !== 'string') return false;
+                    const cleaned = finding.trim();
+                    return cleaned.length > 15 &&
+                        !cleaned.includes('**') &&
+                        !cleaned.endsWith('...') &&
+                        !cleaned.includes('[') &&
+                        cleaned.split(' ').length > 3;
+                });
+
+                debugLog(`Key findings: ${result.key_findings.length} total, ${validFindings.length} valid`);
+
+                if (validFindings.length > 0) {
+                    contentHTML += `
+                        <div class="content-section">
+                            <div class="section-title">💡 Key Findings</div>
+                            <div class="key-findings">
+                                ${validFindings.map((finding, i) => `
+                                    <div class="finding-item">
+                                        <span class="finding-bullet">${i + 1}.</span>
+                                        <span class="finding-text">${escapeHTML(finding)}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    sectionsAdded++;
+                    debugLog('Added key findings section');
+                }
+            }
+
+            // Fallback content
+            if (sectionsAdded === 0) {
+                contentHTML = `
+                    <div class="content-section">
+                        <div class="section-title">ℹ️ Analysis Result</div>
+                        <div class="section-body">
+                            Verdict: ${verdict}<br>
+                            Confidence: ${confidence}<br>
+                            ${result.claim_text ? `Claim analyzed: "${result.claim_text}"` : ''}
+                        </div>
+                    </div>
+                `;
+                debugLog('Using fallback content');
+            }
+
+            debugLog(`Final content sections: ${sectionsAdded}`);
+            content.innerHTML = contentHTML;
+            card.classList.remove('hidden');
+            setStatus('Verification complete', 'complete');
+
+            debugLog('Result rendered successfully');
         }
 
-        async function checkClaimStreaming() {
+        async function checkClaim() {
             const claimText = document.getElementById('claimText').value.trim();
-            const sourceUrl = document.getElementById('sourceUrl').value;
+            const sourceUrl = document.getElementById('sourceUrl').value.trim();
 
             if (!claimText) {
-                alert('Please enter a news claim to verify');
+                alert('Please enter a claim to verify');
                 return;
             }
+
+            debugLog('Starting claim check', { claimText, sourceUrl });
 
             clearResults();
             startTime = Date.now();
 
             const checkBtn = document.getElementById('checkBtn');
-            const normalBtn = document.getElementById('normalBtn');
-
-            let encounteredError = false;
-
-            setStatus('AI verification in progress…', 'processing');
             checkBtn.disabled = true;
-            normalBtn.disabled = true;
-
-            const data = {
-                claim_text: claimText,
-                source_url: sourceUrl,
-                crisis_category: document.getElementById('crisisType').value
-            };
+            setStatus('AI verification in progress...', 'processing');
 
             try {
-                const response = await fetch(`${API_BASE}/check/stream`, {
+                const requestBody = {
+                    claim_text: claimText,
+                    source_url: sourceUrl || null,
+                    crisis_category: document.getElementById('crisisType').value
+                };
+
+                debugLog('Making API request', requestBody);
+
+                const response = await fetch(`${API_BASE}/fact-check`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(requestBody)
                 });
 
+                debugLog(`API response status: ${response.status}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
                 if (!response.body) {
-                    throw new Error('Streaming is not supported by the server response.');
+                    throw new Error('Streaming not supported');
                 }
 
                 const reader = response.body.getReader();
@@ -1071,124 +1019,86 @@
 
                 while (true) {
                     const { done, value } = await reader.read();
-                    if (done) break;
+                    if (done) {
+                        debugLog('Stream reading complete');
+                        break;
+                    }
 
                     const text = decoder.decode(value, { stream: true });
-                    const lines = text.split('\\n').filter(line => line.trim());
+                    const lines = text.split('\n').filter(line => line.trim());
+
+                    debugLog(`Received ${lines.length} lines from stream`);
 
                     for (const line of lines) {
                         try {
                             const event = JSON.parse(line);
+                            debugLog(`Processing event: ${event.type}`, event);
                             handleStreamEvent(event);
-                        } catch (error) {
-                            console.error('Parse error:', error);
+                        } catch (e) {
+                            debugLog('Parse error for line', { line, error: e.message });
                         }
                     }
                 }
             } catch (error) {
-                encounteredError = true;
-                addUpdate('error', 'System error', error.message);
-                setStatus('Verification failed. Please try again.', 'error');
+                debugLog('Error in checkClaim', error);
+                addUpdate('error', 'Error', error.message);
+                setStatus('Verification failed', 'error');
             } finally {
                 checkBtn.disabled = false;
-                normalBtn.disabled = false;
-
-                if (!encounteredError) {
-                    setStatus('Verification complete. Results ready.', 'complete');
-                }
-            }
-        }
-
-        async function checkClaimNormal() {
-            const claimText = document.getElementById('claimText').value.trim();
-            const sourceUrl = document.getElementById('sourceUrl').value;
-
-            if (!claimText) {
-                alert('Please enter a news claim to verify');
-                return;
-            }
-
-            clearResults();
-            startTime = Date.now();
-
-            const checkBtn = document.getElementById('checkBtn');
-            const normalBtn = document.getElementById('normalBtn');
-            let encounteredError = false;
-
-            setStatus('Quick verification in progress…', 'processing');
-            checkBtn.disabled = true;
-            normalBtn.disabled = true;
-
-            const data = {
-                claim_text: claimText,
-                source_url: sourceUrl,
-                crisis_category: document.getElementById('crisisType').value
-            };
-
-            try {
-                const response = await fetch(`${API_BASE}/check`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-
-                if (!response.ok) {
-                    const errorBody = await response.json();
-                    throw new Error(errorBody.detail || 'Failed to process claim');
-                }
-
-                const result = await response.json();
-                displayNormalResult(result);
-            } catch (error) {
-                encounteredError = true;
-                addUpdate('error', 'System error', error.message);
-                setStatus('Verification failed. Please try again.', 'error');
-            } finally {
-                checkBtn.disabled = false;
-                normalBtn.disabled = false;
-
-                if (!encounteredError) {
-                    setStatus('Verification complete. Results ready.', 'complete');
-                }
             }
         }
 
         function handleStreamEvent(event) {
+            debugLog(`Stream event: ${event.type}`, event);
+
+            // Handle direct result data (no event wrapping)
+            if (!event.type && event.verdict) {
+                debugLog('Direct result data received (no event wrapper)', event);
+                renderResult(event);
+                addUpdate('final_result', 'Final Result', 'Analysis complete');
+                return;
+            }
+
             switch (event.type) {
                 case 'start':
-                    addUpdate('start', 'Session initiated', event.content);
+                    addUpdate('start', 'Session Started', event.content);
                     break;
                 case 'phase':
-                    setStatus(event.content, 'processing');
-                    addUpdate('phase', 'Phase update', event.content);
+                    addUpdate('phase', 'Phase Update', event.content);
                     break;
                 case 'agent_start':
-                    addUpdate('agent_start', event.agent_name || 'Agent', event.content);
+                    addUpdate('agent_start', event.agent_name, 'Starting analysis...');
                     break;
                 case 'agent_update':
-                    addUpdate('agent_update', event.agent_name || 'Agent update', event.content);
+                    addUpdate('agent_update', event.agent_name, event.content);
                     break;
                 case 'agent_complete':
-                    addUpdate('agent_complete', event.agent_name || 'Agent', event.content);
+                    addUpdate('agent_complete', event.agent_name, 'Complete');
                     break;
                 case 'final_result':
-                    displayStreamResult(event);
-                    addUpdate('final_result', 'Final verdict received', 'Comprehensive report ready below.');
+                    debugLog('Final result received', event.content);
+                    if (event.content) {
+                        renderResult(event.content, event.metadata);
+                        addUpdate('final_result', 'Final Result', 'Analysis complete');
+                    } else {
+                        debugLog('ERROR: No content in final_result event');
+                        addUpdate('error', 'Error', 'No content received in final result');
+                    }
                     break;
                 case 'complete':
-                    addUpdate('complete', 'Process completed', event.content);
-                    updateStats();
+                    addUpdate('complete', 'Process Complete', event.content);
                     break;
                 case 'error':
-                    addUpdate('error', 'Agent error', event.content);
-                    setStatus('An error occurred during analysis.', 'error');
+                    addUpdate('error', 'Error', event.content);
+                    setStatus('Error occurred', 'error');
                     break;
                 default:
-                    console.warn('Unhandled event type', event.type);
+                    debugLog('Unknown event type', event);
             }
         }
 
         function addUpdate(type, title, content) {
+            debugLog(`Adding timeline update: ${type} - ${title}`);
             const container = document.getElementById('updatesContainer');
             const entry = document.createElement('div');
             entry.className = `timeline-entry type-${type}`;
@@ -1197,90 +1107,32 @@
                     <span class="entry-title">${escapeHTML(title)}</span>
                     <span class="entry-time">${new Date().toLocaleTimeString()}</span>
                 </div>
-                <div class="entry-body">${formatMultilineContent(content)}</div>
+                <div class="entry-body">${escapeHTML(content)}</div>
             `;
             container.appendChild(entry);
             container.scrollTop = container.scrollHeight;
         }
 
-        function displayStreamResult(event) {
-            const metadata = event.metadata || {};
-            renderAnalysisSummary(metadata, event.content);
-        }
-
-        function displayNormalResult(result) {
-            const processingTime = ((Date.now() - startTime) / 1000).toFixed(2);
-
-            const sections = [];
-            if (result.public_summary) {
-                sections.push(`Public Summary:\\n${result.public_summary}`);
-            }
-            if (result.evidence_summary) {
-                sections.push(`Evidence Summary:\\n${result.evidence_summary}`);
-            }
-            if (result.reasoning_chain) {
-                sections.push(`Reasoning:\\n${result.reasoning_chain}`);
-            }
-
-            renderAnalysisSummary(
-                {
-                    verdict: result.verdict,
-                    confidence: result.confidence,
-                    processing_time_seconds: Number(result.processing_time_seconds || processingTime),
-                    claim: result.claim_text,
-                    source: result.source_url
-                },
-                sections.join('\\n\\n')
-            );
-
-            addUpdate('final_result', 'Final verdict received', 'Comprehensive report ready below.');
-            addUpdate('complete', 'Process completed', `Fact-check completed in ${processingTime}s`);
-            updateStats();
-        }
-
         function clearResults() {
+            debugLog('Clearing results');
             document.getElementById('updatesContainer').innerHTML = '';
-            document.getElementById('stats').style.display = 'none';
-
-            const summaryCard = document.getElementById('analysisSummary');
-            summaryCard.classList.add('hidden');
+            document.getElementById('analysisSummary').classList.add('hidden');
             document.getElementById('analysisContent').innerHTML = '';
-            document.getElementById('analysisClaim').textContent = '—';
-            document.getElementById('analysisSource').textContent = 'No source provided';
-            document.getElementById('analysisTime').textContent = '—';
-            document.getElementById('analysisTitle').textContent = 'No verification yet';
-            document.getElementById('analysisSubtitle').textContent = 'Submit a news claim to receive AI-powered fact-checking analysis.';
-            document.getElementById('analysisVerdict').className = 'badge verdict-unverified';
-            document.getElementById('analysisVerdict').textContent = 'UNVERIFIED';
-            document.getElementById('analysisConfidence').className = 'badge badge--subtle';
-            document.getElementById('analysisConfidence').textContent = 'Confidence pending';
-
-            setStatus('Ready to verify', 'idle');
-        }
-
-        async function updateStats() {
-            try {
-                const response = await fetch(`${API_BASE}/stats`);
-                if (!response.ok) return;
-
-                const stats = await response.json();
-
-                document.getElementById('agentsCount').textContent = stats.agents.active;
-                document.getElementById('processingTime').textContent =
-                    ((Date.now() - startTime) / 1000).toFixed(2) + 's';
-                document.getElementById('modelProvider').textContent =
-                    stats.model.provider.toUpperCase();
-
-                const statsGrid = document.getElementById('stats');
-                statsGrid.style.display = 'grid';
-            } catch (error) {
-                console.error('Failed to load stats:', error);
+            if (debugMode) {
+                document.getElementById('debugContent').textContent = 'Debug cleared...\n\n';
             }
+            setStatus('Ready to verify', 'idle');
         }
 
         window.onload = () => {
             setStatus('Ready to verify', 'idle');
+            debugLog('Page loaded');
         };
+
+        // Global error handler
+        window.addEventListener('error', (e) => {
+            debugLog('Global error', { message: e.message, filename: e.filename, line: e.lineno });
+        });
     </script>
 </body>
 
