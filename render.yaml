@@ -16,14 +16,7 @@ services:
         value: https://news-verification-api.onrender.com
       - fromGroup: news-verification-secrets
 
-  # PostgreSQL Database (optional - for storing fact check results)
-  - type: pserv
-    name: news-verification-db
-    databaseName: news_verification
-    user: news_verification_user
-    plan: free
-    ipAllowList: []
-
+  
 # Environment Groups for secrets
 envVarGroups:
   - name: news-verification-secrets
